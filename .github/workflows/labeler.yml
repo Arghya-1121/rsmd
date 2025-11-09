@@ -3,8 +3,6 @@ name: Labeler
 on:
   pull_request:
     types: [opened, synchronize, reopened, edited]
-  issues:
-    types: [opened, edited]
 
 permissions:
   contents: read
@@ -15,9 +13,10 @@ jobs:
   label:
     name: Label PR
     runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request'
+    if: github.event.pull_request.head.repo.full_name == github.repository
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
       - name: Apply labels
         uses: actions/labeler@v5
@@ -25,17 +24,3 @@ jobs:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           configuration-path: .github/labeler.yml
           sync-labels: true
-
-  label-issue:
-    name: Label Issue
-    runs-on: ubuntu-latest
-    if: github.event_name == 'issues'
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Apply issue labels
-        uses: github/issue-labeler@v3.4
-        with:
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
-          configuration-path: .github/issue-labeler.yml
-          enable-versioned-regex: 0

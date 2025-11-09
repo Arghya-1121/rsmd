@@ -84,7 +84,6 @@ directory:
       - 'src/directory.rs'
 
 # Configuration files
-# Configuration files
 config:
   - changed-files:
     - any-glob-to-any-file:
